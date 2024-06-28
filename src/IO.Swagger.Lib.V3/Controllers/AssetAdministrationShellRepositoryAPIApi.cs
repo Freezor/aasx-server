@@ -409,8 +409,8 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
     public virtual IActionResult GetAllSubmodelElementsAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string? submodelIdentifier,
-                                                                     [FromQuery] int? limit, [FromQuery] string? cursor, [FromQuery] [Required] LevelEnum level,
-                                                                     [FromQuery] [Required] ExtentEnum extent)
+                                                                     [FromQuery] int? limit, [FromQuery] string? cursor, [FromQuery] LevelEnum level,
+                                                                     [FromQuery] ExtentEnum extent)
     {
         var decodedAasIdentifier      = _decoderService.Decode("aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode("submodelIdentifier", submodelIdentifier);
@@ -460,8 +460,8 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 404, type: typeof(Result), description: "Not Found")]
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
-    public virtual IActionResult GetAllSubmodelElementsMetadataAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string? submodelIdentifier,
-                                                                             [FromQuery] int? limit, [FromQuery] [Required] string cursor, [FromQuery] [Required] LevelEnum level)
+    public virtual IActionResult GetAllSubmodelElementsMetadataAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string submodelIdentifier,
+                                                                             [FromQuery] int? limit, [FromQuery] [Required] string cursor, [FromQuery] LevelEnum level)
     {
         var decodedAasIdentifier      = _decoderService.Decode("aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode("submodelIdentifier", submodelIdentifier);
@@ -513,9 +513,9 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 404, type: typeof(Result), description: "Not Found")]
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
-    public virtual IActionResult GetAllSubmodelElementsPathAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string? submodelIdentifier,
-                                                                         [FromQuery] int? limit, [FromQuery] string? cursor, [FromQuery] [Required] LevelEnum level,
-                                                                         [FromQuery] [Required] ExtentEnum extent)
+    public virtual IActionResult GetAllSubmodelElementsPathAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string submodelIdentifier,
+                                                                         [FromQuery] int? limit, [FromQuery] string? cursor, [FromQuery] LevelEnum level,
+                                                                         [FromQuery] ExtentEnum extent)
     {
         var decodedAasIdentifier      = _decoderService.Decode($"aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode($"submodelIdentifier", submodelIdentifier);
@@ -534,7 +534,7 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
         var submodelElementsList = _aasService.GetAllSubmodelElements(decodedAasIdentifier, decodedSubmodelIdentifier);
 
         var smePaginated = _paginationService.GetPaginatedList(submodelElementsList, new PaginationParameters(cursor, limit));
-        var smeLevelList = _levelExtentModifierService.ApplyLevelExtent(smePaginated.result??[], level, extent);
+        var smeLevelList = _levelExtentModifierService.ApplyLevelExtent(smePaginated.result ?? [], level, extent);
         var smePathList  = _pathModifierService.ToIdShortPath(smeLevelList.ConvertAll(sme => (ISubmodelElement)sme));
         var output       = new PathPagedResult {result = smePathList, paging_metadata = smePaginated.paging_metadata};
         return new ObjectResult(output);
@@ -548,7 +548,7 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     /// <param name="limit">The maximum number of elements in the response array</param>
     /// <param name="cursor">A server-generated identifier retrieved from pagingMetadata that specifies from which position the result listing should continue</param>
     /// <param name="level">Determines the structural depth of the respective resource content</param>
-    /// <param name="extent"></param>
+    /// <param name="extent">Determines to which extent the resource is being serialized</param>
     /// <response code="200">List of References of the found submodel elements</response>
     /// <response code="400">Bad Request, e.g. the request parameters of the format of the request body is wrong.</response>
     /// <response code="401">Unauthorized, e.g. the server refused the authorization attempt.</response>
@@ -568,8 +568,8 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
     public virtual IActionResult GetAllSubmodelElementsReferenceAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string submodelIdentifier,
-                                                                              [FromQuery] int? limit, [FromQuery] string? cursor, [FromQuery] [Required] LevelEnum level,
-                                                                              [FromQuery] [Required] ExtentEnum extent)
+                                                                              [FromQuery] int? limit, [FromQuery] string? cursor, [FromQuery] LevelEnum level,
+                                                                              [FromQuery] ExtentEnum extent)
     {
         var decodedAasIdentifier      = _decoderService.Decode("aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode("submodelIdentifier", submodelIdentifier);
@@ -602,6 +602,7 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     /// <param name="limit">The maximum number of elements in the response array</param>
     /// <param name="cursor">A server-generated identifier retrieved from pagingMetadata that specifies from which position the result listing should continue</param>
     /// <param name="level">Determines the structural depth of the respective resource content</param>
+    /// <param name="extent">Determines to which extent the resource is being serialized</param>
     /// <response code="200">List of found submodel elements in their ValueOnly representation</response>
     /// <response code="400">Bad Request, e.g. the request parameters of the format of the request body is wrong.</response>
     /// <response code="401">Unauthorized, e.g. the server refused the authorization attempt.</response>
@@ -621,8 +622,8 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
     public virtual IActionResult GetAllSubmodelElementsValueOnlyAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string submodelIdentifier,
-                                                                              [FromQuery] int? limit, [FromQuery] string? cursor, [FromQuery] [Required] LevelEnum level,
-                                                                              [FromQuery] [Required] ExtentEnum extent)
+                                                                              [FromQuery] int? limit, [FromQuery] string? cursor, [FromQuery] LevelEnum level,
+                                                                              [FromQuery] ExtentEnum extent)
     {
         var decodedAasIdentifier      = _decoderService.Decode("aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode("submodelIdentifier", submodelIdentifier);
@@ -1073,12 +1074,12 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
     public virtual IActionResult GetSubmodelByIdMetadataAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string submodelIdentifier,
-                                                                      [FromQuery] [Required] LevelEnum level)
+                                                                      [FromQuery] LevelEnum level)
     {
         var decodedAasIdentifier      = _decoderService.Decode("aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode("submodelIdentifier", submodelIdentifier);
 
-        _logger.LogInformation($"Received request to get metadat of the submodel with id {decodedSubmodelIdentifier} from the AAS with id {decodedAasIdentifier}");
+        _logger.LogInformation($"Received request to get metadata of the submodel with id {decodedSubmodelIdentifier} from the AAS with id {decodedAasIdentifier}");
 
         var submodel   = _aasService.GetSubmodelById(decodedAasIdentifier, decodedSubmodelIdentifier);
         var authResult = _authorizationService.AuthorizeAsync(User, submodel, "SecurityPolicy").Result;
@@ -1121,7 +1122,7 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
     public virtual IActionResult GetSubmodelByIdPathAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string submodelIdentifier,
-                                                                  [FromQuery] [Required] LevelEnum level)
+                                                                  [FromQuery] LevelEnum level)
     {
         var decodedAasIdentifier      = _decoderService.Decode($"aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode($"submodelIdentifier", submodelIdentifier);
@@ -1215,7 +1216,7 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
     public virtual IActionResult GetSubmodelByIdValueOnlyAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string submodelIdentifier,
-                                                                       [FromQuery] [Required] LevelEnum level, [FromQuery] [Required] ExtentEnum extent)
+                                                                       [FromQuery] LevelEnum level, [FromQuery] ExtentEnum extent)
     {
         var decodedAasIdentifier      = _decoderService.Decode("aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode("submodelIdentifier", submodelIdentifier);
@@ -1265,8 +1266,8 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
     public virtual IActionResult GetSubmodelElementByPathAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string submodelIdentifier,
-                                                                       [FromRoute] [Required] string idShortPath, [FromQuery] [Required] LevelEnum level,
-                                                                       [FromQuery] [Required] ExtentEnum extent)
+                                                                       [FromRoute] [Required] string idShortPath, [FromQuery] LevelEnum level,
+                                                                       [FromQuery] ExtentEnum extent)
     {
         var decodedAasIdentifier      = _decoderService.Decode("aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode("submodelIdentifier", submodelIdentifier);
@@ -1319,7 +1320,7 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
     public virtual IActionResult GetSubmodelElementByPathMetadataAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string submodelIdentifier,
-                                                                               [FromRoute] [Required] string idShortPath, [FromQuery] [Required] LevelEnum level)
+                                                                               [FromRoute] [Required] string idShortPath, [FromQuery] LevelEnum level)
     {
         var decodedAasIdentifier      = _decoderService.Decode("aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode("submodelIdentifier", submodelIdentifier);
@@ -1372,7 +1373,7 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
     public virtual IActionResult GetSubmodelElementByPathPathAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string submodelIdentifier,
-                                                                           [FromRoute] [Required] string idShortPath, [FromQuery] [Required] LevelEnum level)
+                                                                           [FromRoute] [Required] string idShortPath, [FromQuery] LevelEnum level)
     {
         var decodedAasIdentifier      = _decoderService.Decode($"aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode($"submodelIdentifier", submodelIdentifier);
@@ -1480,8 +1481,8 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
     public virtual IActionResult GetSubmodelElementByPathValueOnlyAasRepository([FromRoute] [Required] string aasIdentifier, [FromRoute] [Required] string submodelIdentifier,
-                                                                                [FromRoute] [Required] string idShortPath, [FromQuery] [Required] LevelEnum level,
-                                                                                [FromQuery] [Required] ExtentEnum extent)
+                                                                                [FromRoute] [Required] string idShortPath, [FromQuery] LevelEnum level,
+                                                                                [FromQuery] ExtentEnum extent)
     {
         var decodedAasIdentifier      = _decoderService.Decode("aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode("submodelIdentifier", submodelIdentifier);
@@ -1866,12 +1867,12 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
     public virtual IActionResult PatchSubmodelByIdValueOnlyAasRepository([FromBody] SubmodelValue? body, [FromRoute] [Required] string aasIdentifier,
-                                                                         [FromRoute] [Required] string submodelIdentifier, [FromQuery] LevelEnum? level)
+                                                                         [FromRoute] [Required] string submodelIdentifier, LevelEnum level)
     {
         var decodedAasIdentifier      = _decoderService.Decode("aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode("submodelIdentifier", submodelIdentifier);
 
-        _logger.LogInformation($"Received request to update the sumodel with id {decodedSubmodelIdentifier} from the aas with tid {decodedAasIdentifier} by value.");
+        _logger.LogInformation($"Received request to update the submodel with id {decodedSubmodelIdentifier} from the aas with tid {decodedAasIdentifier} by value.");
 
         var submodel = _mappingService.Map(body, "value") as Submodel;
 
@@ -1907,7 +1908,7 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
     public virtual IActionResult PatchSubmodelElementValueByPathAasRepository([FromBody] ISubmodelElement? body, [FromRoute] [Required] string aasIdentifier,
                                                                               [FromRoute] [Required] string submodelIdentifier, [FromRoute] [Required] string idShortPath,
-                                                                              [FromQuery] LevelEnum? level)
+                                                                              [FromQuery] LevelEnum level)
     {
         var decodedAasIdentifier      = _decoderService.Decode("aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode("submodelIdentifier", submodelIdentifier);
@@ -1988,7 +1989,7 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
     public virtual IActionResult PatchSubmodelElementValueByPathValueOnly([FromBody] ISubmodelElementValue? body, [FromRoute] [Required] string aasIdentifier,
                                                                           [FromRoute] [Required] string submodelIdentifier, [FromRoute] [Required] string idShortPath,
-                                                                          [FromQuery] LevelEnum? level)
+                                                                          [FromQuery] LevelEnum level)
     {
         var decodedAasIdentifier      = _decoderService.Decode("aasIdentifier", aasIdentifier);
         var decodedSubmodelIdentifier = _decoderService.Decode("submodelIdentifier", submodelIdentifier);
@@ -2041,6 +2042,7 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     /// <param name="body">Requested submodel element</param>
     /// <param name="aasIdentifier">The Asset Administration Shell’s unique id (UTF8-BASE64-URL-encoded)</param>
     /// <param name="submodelIdentifier">The Submodel’s unique id (UTF8-BASE64-URL-encoded)</param>
+    /// <param name="first"></param>
     /// <response code="201">Submodel element created successfully</response>
     /// <response code="400">Bad Request, e.g. the request parameters of the format of the request body is wrong.</response>
     /// <response code="401">Unauthorized, e.g. the server refused the authorization attempt.</response>
@@ -2096,6 +2098,7 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
     /// <param name="aasIdentifier">The Asset Administration Shell’s unique id (UTF8-BASE64-URL-encoded)</param>
     /// <param name="submodelIdentifier">The Submodel’s unique id (UTF8-BASE64-URL-encoded)</param>
     /// <param name="idShortPath">IdShort path to the submodel element (dot-separated)</param>
+    /// <param name="first"></param>
     /// <response code="201">Submodel element created successfully</response>
     /// <response code="400">Bad Request, e.g. the request parameters of the format of the request body is wrong.</response>
     /// <response code="401">Unauthorized, e.g. the server refused the authorization attempt.</response>
@@ -2393,8 +2396,8 @@ public class AssetAdministrationShellRepositoryAPIApiController : ControllerBase
         }
 
         file.CopyTo(stream);
-        string fileName    = file.FileName;
-        string contentType = file.ContentType;
+        var fileName    = file.FileName;
+        var contentType = file.ContentType;
 
         _aasService.UpdateThumbnail(decodedAasIdentifier, fileName, contentType, stream);
 

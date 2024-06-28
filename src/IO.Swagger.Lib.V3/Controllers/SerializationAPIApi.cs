@@ -17,14 +17,12 @@ using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using System.Linq;
 
 namespace IO.Swagger.Controllers;
 
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
 /// <summary>
-/// 
+/// Controller for the serialization and download of AAS files.
 /// </summary>
 [ApiController]
 public class SerializationAPIApiController : ControllerBase
@@ -33,6 +31,13 @@ public class SerializationAPIApiController : ControllerBase
     private readonly IBase64UrlDecoderService _decoderService;
     private readonly IGenerateSerializationService _serializationService;
 
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <param name="decoderService"></param>
+    /// <param name="serializationService"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public SerializationAPIApiController(IAppLogger<SerializationAPIApiController> logger, IBase64UrlDecoderService decoderService,
                                          IGenerateSerializationService serializationService)
     {

@@ -249,7 +249,7 @@ public class SubmodelRepositoryAPIApiController : ControllerBase
         {
             throw new NotAllowed($"Decoding {submodelIdentifier} returned null");
         }
-        
+
         _logger.LogInformation($"Received a request to get all the submodel elements from submodel with id {decodedSubmodelIdentifier}");
         if (!Program.noSecurity)
         {
@@ -445,12 +445,12 @@ public class SubmodelRepositoryAPIApiController : ControllerBase
     {
         var decodedSubmodelIdentifier = _decoderService.Decode($"submodelIdentifier", submodelIdentifier);
         _logger.LogDebug($"Received request to get all the submodel elements from the submodel with id {decodedSubmodelIdentifier}");
-        
+
         if (decodedSubmodelIdentifier == null)
         {
             throw new NotAllowed($"Decoding {submodelIdentifier} returned null");
         }
-        
+
         if (!Program.noSecurity)
         {
             var submodel   = _submodelService.GetSubmodelById(decodedSubmodelIdentifier);
