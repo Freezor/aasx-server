@@ -5,6 +5,7 @@
     <Configurations>Debug;Release;DebugSlow</Configurations>
     <Platforms>AnyCPU</Platforms>
     <LangVersion>8</LangVersion>
+    <RuntimeIdentifiers>linux-arm;linux-arm64;win-x64;osx-x64</RuntimeIdentifiers>
 
     <PackageId>AasCore.Aas3_0</PackageId>
     <Version>0.3.0.1-aasV3-alpha-latest</Version>

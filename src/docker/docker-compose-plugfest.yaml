@@ -1,0 +1,115 @@
+services:
+  aasxs-registry:
+    container_name: aas-registry
+    # without docker file
+    # image: docker.io/adminshellio/aasx-server-blazor-for-demo:main
+    # with docker file to e.g. add curl
+    build:
+      context: ./../..
+      dockerfile: ./src/docker/Dockerfile-AasxServerBlazor
+      args:
+        BUILDPLATFORM: linux/arm64
+        TARGETARCH: arm64
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:50001
+      - ASPNETCORE_HTTP_PORTS=50001
+      - Kestrel__Endpoints__Http__Url=http://*:50001
+      - Logging__Loglevel__Microsoft.AspNetCore=Warning
+      - Logging__Loglevel__IO.Swagger=Warning
+      - Logging__Loglevel__AasxServerStandardBib.Services=Warning
+      - WITHPOLICY=FALSE
+    ports:
+      - "50001:5001"
+    volumes:
+      - ./aasxs-registry:/usr/share/aasxs-registry
+      - ./aasxs-registry/temp:/AasxServerBlazor/temp
+    entrypoint: dotnet AasxServerBlazor.dll --save-temp 60 --no-security --data-path /usr/share/aasxs-registry --external-blazor http://localhost:50001
+    healthcheck:
+      test: [ "CMD", "curl", "-k", "http://localhost:50001" ]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+
+  aasxs-repository:
+    container_name: aas-repository
+    # without docker file
+    image: docker.io/adminshellio/aasx-server-blazor-for-demo:main
+    # with docker file to e.g. add curl
+    # build:
+    #  context: .
+    #  dockerfile: ./aasxs-server-curl.dockerfile
+    restart: unless-stopped
+    environment:
+      - DatabaseConnection__ConnectionString=Data Source=$$DATAPATH/database.db
+      - Kestrel__Endpoints__Http__Url=http://*:50002
+      - Logging__Loglevel__Microsoft.AspNetCore=Warning
+      - Logging__Loglevel__IO.Swagger=Warning
+      - Logging__Loglevel__AasxServerStandardBib.Services=Warning
+      - AASREPOSITORY=http://aasxs-repository:50002
+      - WITHPOLICY=FALSE
+      # local registry
+      - AASREGISTRY=http://aasxs-registry:50001
+      # public registry
+      # - AASREGISTRY=https://hackathon.h2894164.stratoserver.net
+    ports:
+      - "50002:50002"
+    volumes:
+      - ./aasxs-repository:/usr/share/aasxs-repository
+    # without security
+    entrypoint: dotnet AasxServerBlazor.dll --no-security --data-path /usr/share/aasxs-repository --external-blazor http://localhost:50002
+    # with security
+    # entrypoint: dotnet AasxServerBlazor.dll --data-path /usr/share/aasxs-repository --external-blazor http://localhost:50002
+    # with DB, without security
+    # entrypoint: dotnet AasxServerBlazor.dll --with-db --start-index 1000 --no-security --data-path /usr/share/aasxs-repository --external-blazor http://localhost:50002
+    healthcheck:
+      test: [ "CMD", "curl", "-k", "http://localhost:50002" ]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+    depends_on:
+      aasxs-registry:
+        condition: service_healthy
+
+  aasxs-view:
+    container_name: aas-view
+    # without docker file
+    image: docker.io/adminshellio/aasx-server-blazor-for-demo:main
+    # with docker file to e.g. add curl
+    # build:
+    #  context: .
+    #  dockerfile: ./aasxs-server-curl.dockerfile
+    restart: unless-stopped
+    environment:
+      - Kestrel__Endpoints__Http__Url=http://*:50003
+      - Logging__Loglevel__Microsoft.AspNetCore=Warning
+      - Logging__Loglevel__IO.Swagger=Warning
+      - Logging__Loglevel__AasxServerStandardBib.Services=Warning
+      - IFRAMEPATH=https://dpp40-2-v2.industrialdigitaltwin.org/dashboard/submodelViewV3.html
+      - WITHPOLICY=FALSE
+      # local registry
+      - AASREGISTRY=http://aasxs-registry:50001
+      # public registry hackathon
+      # - AASREGISTRY=https://hackathon.h2894164.stratoserver.net
+      # public registry ZVEI PCF Showcase
+      # - AASREGISTRY=https://registry.dpp40-2-v2.industrialdigitaltwin.org
+    ports:
+      - "50003:50003"
+    volumes:
+      - ./aasxs-view:/usr/share/aasxs-view
+      - ./CREDENTIALS-ANONYMOUS.DAT:/AasxServerBlazor/CREDENTIALS-ANONYMOUS.DAT
+      # certificate for security with X509 bearer token and OpenId auth server
+      - ./Andreas_Orzelski_Chain.pfx:/AasxServerBlazor/Andreas_Orzelski_Chain.pfx
+      # in case of problems of access through company proxy
+      # proxy.txt includes name with path to proxy.dat
+      # proxy.dat includes 3 lines with proxyURL, username, password
+    entrypoint: dotnet AasxServerBlazor.dll --no-security --data-path /usr/share/aasxs-view --external-blazor http://localhost:50003
+    healthcheck:
+      test: [ "CMD", "curl", "-k", "http://localhost:50003" ]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+    depends_on:
+      aasxs-repository:
+        condition: service_healthy

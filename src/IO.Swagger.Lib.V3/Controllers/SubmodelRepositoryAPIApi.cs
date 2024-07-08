@@ -922,7 +922,7 @@ public class SubmodelRepositoryAPIApiController : ControllerBase
     [SwaggerResponse(statusCode: 405, type: typeof(Result), description: "Method not allowed - Download only valid for File submodel element")]
     [SwaggerResponse(statusCode: 500, type: typeof(Result), description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 0, type: typeof(Result), description: "Default error handling for unmentioned status codes")]
-    public virtual async Task<IActionResult> GetFileByPathSubmodelRepo([FromRoute] [Required] string submodelIdentifier, [FromRoute] [Required] string idShortPath)
+    public virtual async Task<IActionResult> GetFileByPathSubmodelRepo([FromRoute] [Required] string submodelIdentifier, [FromRoute] string? idShortPath)
     {
         var decodedSubmodelIdentifier = _decoderService.Decode("submodelIdentifier", submodelIdentifier);
 
@@ -1202,7 +1202,8 @@ public class SubmodelRepositoryAPIApiController : ControllerBase
                 throw new NotAllowed(failedReason.Message);
             }
 
-            throw new NotAllowed("Policy incorrect!");
+            // TODO: ask Juii
+            //throw new NotAllowed("Policy incorrect!");
         }
 
         var output = _levelExtentModifierService.ApplyLevelExtent(submodel, level, extent);

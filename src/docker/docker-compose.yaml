@@ -5,6 +5,9 @@ services:
     build:
       context: ./../..
       dockerfile: ./src/docker/Dockerfile-AasxServerBlazor
+      args:
+        BUILDPLATFORM: linux/arm64
+        TARGETARCH: arm64
     restart: unless-stopped
     ports:
       - "5001:5001"

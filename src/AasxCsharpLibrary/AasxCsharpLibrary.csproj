@@ -6,6 +6,7 @@
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <Version>0.3.0.1-aasV3-alpha-latest</Version>
         <Nullable>enable</Nullable>
+        <RuntimeIdentifiers>linux-arm;linux-arm64;win-x64;osx-x64</RuntimeIdentifiers>
         <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
     </PropertyGroup>
     <PropertyGroup>
