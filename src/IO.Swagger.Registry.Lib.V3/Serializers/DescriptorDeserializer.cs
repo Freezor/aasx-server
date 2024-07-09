@@ -5,7 +5,7 @@ namespace IO.Swagger.Registry.Lib.V3.Serializers
 {
     public static class DescriptorDeserializer
     {
-        public static AssetAdministrationShellDescriptor AssetAdministrationShellDescriptorFrom(JsonNode node)
+        public static AssetAdministrationShellDescriptor? AssetAdministrationShellDescriptorFrom(JsonNode node)
         {
             AssetAdministrationShellDescriptor? result = DescriptorDeserializeImplementation.AssetAdministrationShellDescriptorFrom(
                 node,

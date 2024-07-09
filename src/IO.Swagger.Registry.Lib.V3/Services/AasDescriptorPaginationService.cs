@@ -17,10 +17,10 @@ namespace IO.Swagger.Registry.Lib.V3.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public AasDescriptorPagedResult GetPaginatedList(List<AssetAdministrationShellDescriptor> sourceList, PaginationParameters paginationParameters)
+        public AasDescriptorPagedResult GetPaginatedList(List<AssetAdministrationShellDescriptor?> sourceList, PaginationParameters paginationParameters)
         {
-            var startIndex = paginationParameters.Cursor;
-            var endIndex = startIndex + paginationParameters.Limit - 1;
+            var                                       startIndex = paginationParameters.Cursor;
+            var                                       endIndex   = startIndex + paginationParameters.Limit - 1;
             var outputList = GetPaginationList(sourceList, startIndex, endIndex);
 
             //Creating pagination result

@@ -36,7 +36,7 @@ public class RegistryInitializerService : IRegistryInitializerService
     private static List<string> getRegistry = [];
     private static List<string> postRegistry = [];
     private static List<string?> federatedElemensSemanticId = [];
-    private static List<AssetAdministrationShellDescriptor> aasDescriptorsForSubmodelView = [];
+    private static List<AssetAdministrationShellDescriptor?> aasDescriptorsForSubmodelView = [];
 
     public RegistryInitializerService(IAasDescriptorWritingService aasDescriptorWritingService)
     {
@@ -47,7 +47,7 @@ public class RegistryInitializerService : IRegistryInitializerService
 
     public ISubmodel? GetAasRegistry() => aasRegistry;
 
-    public List<AssetAdministrationShellDescriptor> GetAasDescriptorsForSubmodelView() => aasDescriptorsForSubmodelView;
+    public List<AssetAdministrationShellDescriptor?> GetAasDescriptorsForSubmodelView() => aasDescriptorsForSubmodelView;
 
     public static X509Certificate2? Certificate;
     private readonly IAasDescriptorWritingService _aasDescriptorWritingService;
@@ -320,7 +320,7 @@ public class RegistryInitializerService : IRegistryInitializerService
 
                     foreach (var greg in getRegistry)
                     {
-                        var aasDescriptors = new List<AssetAdministrationShellDescriptor>();
+                        var aasDescriptors = new List<AssetAdministrationShellDescriptor?>();
 
                         string? json        = null;
                         string? accessToken = null;

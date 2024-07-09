@@ -33,8 +33,8 @@ public class AasDescriptorPaginationServiceTests
     public void GetPaginatedList_WhenSourceListIsEmpty_ReturnsEmptyResult()
     {
         // Arrange
-        var paginationParameters = new PaginationParameters(null, 10);
-        var sourceList           = new List<AssetAdministrationShellDescriptor>();
+        var                                       paginationParameters = new PaginationParameters(null, 10);
+        var sourceList           = new List<AssetAdministrationShellDescriptor?>();
 
         // Act
         var result = _service.GetPaginatedList(sourceList, paginationParameters);
@@ -48,8 +48,8 @@ public class AasDescriptorPaginationServiceTests
     public void GetPaginatedList_WhenSourceListHasElements_ReturnsPaginatedResult()
     {
         // Arrange
-        var paginationParameters = new PaginationParameters("0", 2);
-        var sourceList           = _fixture.CreateMany<AssetAdministrationShellDescriptor>(5).ToList();
+        var                                       paginationParameters = new PaginationParameters("0", 2);
+        List<AssetAdministrationShellDescriptor?> sourceList           = _fixture.CreateMany<AssetAdministrationShellDescriptor>(5).ToList();
 
         // Act
         var result = _service.GetPaginatedList(sourceList, paginationParameters);
@@ -63,8 +63,8 @@ public class AasDescriptorPaginationServiceTests
     public void GetPaginatedList_WhenEndIndexExceedsSourceList_ReturnsCappedResult()
     {
         // Arrange
-        var paginationParameters = new PaginationParameters("3", 5);
-        var sourceList           = _fixture.CreateMany<AssetAdministrationShellDescriptor>(5).ToList();
+        var                                       paginationParameters = new PaginationParameters("3", 5);
+        List<AssetAdministrationShellDescriptor?> sourceList           = _fixture.CreateMany<AssetAdministrationShellDescriptor>(5).ToList();
 
         // Act
         var result = _service.GetPaginatedList(sourceList, paginationParameters);
@@ -78,8 +78,8 @@ public class AasDescriptorPaginationServiceTests
     public void GetPaginationList_WhenStartIndexExceedsSourceList_LogsError()
     {
         // Arrange
-        var sourceList           = _fixture.CreateMany<AssetAdministrationShellDescriptor>(5).ToList();
-        var paginationParameters = new PaginationParameters("6", 5);
+        List<AssetAdministrationShellDescriptor?> sourceList           = _fixture.CreateMany<AssetAdministrationShellDescriptor>(5).ToList();
+        var    paginationParameters = new PaginationParameters("6", 5);
 
         // Act
         var result = _service.GetPaginatedList(sourceList, paginationParameters);

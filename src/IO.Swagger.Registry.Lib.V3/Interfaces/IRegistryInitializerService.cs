@@ -13,8 +13,8 @@ namespace IO.Swagger.Registry.Lib.V3.Interfaces
         void       CreateMultipleAssetAdministrationShellDescriptor(List<AssetAdministrationShellDescriptor> body, DateTime timestamp);
         ISubmodel? GetAasRegistry();
 
-        List<AssetAdministrationShellDescriptor> GetAasDescriptorsForSubmodelView();
-        List<string>                             GetRegistryList();
-        Task                                     InitRegistry(List<AasxCredentialsEntry> cList, DateTime timestamp, bool initAgain = false);
+        List<AssetAdministrationShellDescriptor?>       GetAasDescriptorsForSubmodelView();
+        List<string> GetRegistryList();
+        Task         InitRegistry(List<AasxCredentialsEntry> cList, DateTime timestamp, bool initAgain = false);
     }
 }

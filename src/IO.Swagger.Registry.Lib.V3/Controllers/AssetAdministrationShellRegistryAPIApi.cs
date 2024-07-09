@@ -159,7 +159,7 @@ public class AssetAdministrationShellRegistryAPIApiController : ControllerBase
             assetList = [decodedAssetType];
         }
 
-        List<AssetAdministrationShellDescriptor> aasDescriptors;
+        List<AssetAdministrationShellDescriptor?> aasDescriptors;
         if (!Program.withDb)
         {
             // from AAS memory
@@ -549,7 +549,7 @@ public class AssetAdministrationShellRegistryAPIApiController : ControllerBase
             var assetList = (from kv in assetIds where kv.Value != "" select _decoderService.Decode("assetId", kv.Value)).ToList();
 
             // single assetId
-            if (assetId != null && assetId != "")
+            if (!string.IsNullOrEmpty(assetId))
             {
                 var decodedAssetId = _decoderService.Decode("assetId", assetId);
                 assetList.Add(decodedAssetId);

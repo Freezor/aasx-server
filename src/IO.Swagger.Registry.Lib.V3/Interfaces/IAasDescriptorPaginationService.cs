@@ -7,6 +7,6 @@ namespace IO.Swagger.Registry.Lib.V3.Interfaces
 {
     public interface IAasDescriptorPaginationService
     {
-        AasDescriptorPagedResult GetPaginatedList(List<AssetAdministrationShellDescriptor> sourceList, PaginationParameters paginationParameters);
+        AasDescriptorPagedResult GetPaginatedList(List<AssetAdministrationShellDescriptor?> sourceList, PaginationParameters paginationParameters);
     }
 }

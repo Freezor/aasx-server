@@ -35,9 +35,9 @@ namespace IO.Swagger.Registry.Lib.V3.Formatters
 
         public override Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
         {
-            Type type = context.ModelType;
-            var request = context.HttpContext.Request;
-            object result = null;
+            Type    type    = context.ModelType;
+            var     request = context.HttpContext.Request;
+            object? result  = null;
 
 
             JsonNode node = System.Text.Json.JsonSerializer.DeserializeAsync<JsonNode>(request.Body).Result;
